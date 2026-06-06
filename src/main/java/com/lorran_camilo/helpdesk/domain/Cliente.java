@@ -2,6 +2,7 @@ package com.lorran_camilo.helpdesk.domain;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lorran_camilo.helpdesk.domain.enums.Perfil;
 
 import jakarta.persistence.Entity;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 @Entity
 public class Cliente extends Pessoa {
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Chamado> chamados = new ArrayList<>();
 
