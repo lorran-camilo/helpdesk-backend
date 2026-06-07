@@ -8,18 +8,19 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.lorran_camilo.helpdesk.domain.Tecnico;
+import com.lorran_camilo.helpdesk.domain.Cliente;
 import com.lorran_camilo.helpdesk.domain.enums.Perfil;
+
 import jakarta.validation.constraints.NotNull;
 
 @JsonPropertyOrder({ "id",
         "dataCriacao",
         "nome",
-        "email",
         "cpf",
+        "email",
         "senha",
         "perfis" })
-public class TecnicoDTO implements Serializable {
+public class ClienteDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     protected Integer id;
@@ -36,22 +37,20 @@ public class TecnicoDTO implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy")
     protected LocalDate dataCriacao = LocalDate.now();
 
-    public TecnicoDTO() {
+    public ClienteDTO() {
         super();
         addPerfis(Perfil.CLIENTE);
-        addPerfis(Perfil.TECNICO);
     }
 
-    public TecnicoDTO(Tecnico tecnico) {
-        this.id = tecnico.getId();
-        this.nome = tecnico.getNome();
-        this.cpf = tecnico.getCpf();
-        this.email = tecnico.getEmail();
-        this.senha = tecnico.getSenha();
-        this.perfis = tecnico.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
-        this.dataCriacao = tecnico.getDataCriacao();
+    public ClienteDTO(Cliente cliente) {
+        this.id = cliente.getId();
+        this.nome = cliente.getNome();
+        this.cpf = cliente.getCpf();
+        this.email = cliente.getEmail();
+        this.senha = cliente.getSenha();
+        this.perfis = cliente.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
+        this.dataCriacao = cliente.getDataCriacao();
         addPerfis(Perfil.CLIENTE);
-        addPerfis(Perfil.TECNICO);
     }
 
     public Integer getId() {

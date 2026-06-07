@@ -3,3 +3,6 @@ spring:
     name: helpdesk
   profiles:
     active: test
+jwt:
+  secret: ${JWT_SECRET:XwWbK4g7J8J9M3J5V7W9X3Y1Q6P2J4M7V9X2Y5Z8W1X6P3J5V8X2Y7Z9W1J4M6V9X3Y2Z5}
+  expiration: ${JWT_EXPIRATION:180000}
