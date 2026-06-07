@@ -8,60 +8,60 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lorran_camilo.helpdesk.domain.Pessoa;
-import com.lorran_camilo.helpdesk.domain.Tecnico;
-import com.lorran_camilo.helpdesk.domain.dtos.TecnicoDTO;
+import com.lorran_camilo.helpdesk.domain.Cliente;
+import com.lorran_camilo.helpdesk.domain.dtos.ClienteDTO;
 import com.lorran_camilo.helpdesk.repositories.PessoaRepository;
-import com.lorran_camilo.helpdesk.repositories.TecnicoRepository;
+import com.lorran_camilo.helpdesk.repositories.ClienteRepository;
 import com.lorran_camilo.helpdesk.services.exceptions.DataIntegrityViolationException;
 import com.lorran_camilo.helpdesk.services.exceptions.ObjectNotFoundException;
 
 import jakarta.validation.Valid;
 
 @Service
-public class TecnicoService {
+public class ClienteService {
 
     @Autowired
-    private TecnicoRepository repository;
+    private ClienteRepository repository;
     @Autowired
     private PessoaRepository pessoaRepository;
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    public Tecnico findById(Integer id) {
-        Optional<Tecnico> obj = repository.findById(id);
+    public Cliente findById(Integer id) {
+        Optional<Cliente> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado: " + id));
     }
 
-    public List<Tecnico> findAll() {
+    public List<Cliente> findAll() {
         return repository.findAll();
     }
 
-    public Tecnico create(TecnicoDTO objDTO) {
+    public Cliente create(ClienteDTO objDTO) {
         objDTO.setId(null);
         objDTO.setSenha(encoder.encode(objDTO.getSenha()));
         validaPorCpfEEmail(objDTO);
-        Tecnico newObj = new Tecnico(objDTO);
+        Cliente newObj = new Cliente(objDTO);
         return repository.save(newObj);
     }
 
-    public Tecnico update(Integer id, @Valid TecnicoDTO objDTO) {
+    public Cliente update(Integer id, @Valid ClienteDTO objDTO) {
         objDTO.setId(id);
-        Tecnico obj = findById(id);
+        Cliente obj = findById(id);
         objDTO.setSenha(encoder.encode(objDTO.getSenha()));
         validaPorCpfEEmail(objDTO);
-        obj = new Tecnico(objDTO);
+        obj = new Cliente(objDTO);
         return repository.save(obj);
     }
 
     public void delete(Integer id) {
-        Tecnico obj = findById(id);
+        Cliente obj = findById(id);
         if (obj.getChamados().size() > 0) {
-            throw new DataIntegrityViolationException("Tecnico não pode ser deletado pois possui chamados abertos.");
+            throw new DataIntegrityViolationException("Cliente não pode ser deletado pois possui chamados abertos.");
         }
         repository.deleteById(id);
     }
 
-    private void validaPorCpfEEmail(TecnicoDTO objDTO) {
+    private void validaPorCpfEEmail(ClienteDTO objDTO) {
         Optional<Pessoa> obj = pessoaRepository.findByCpf(objDTO.getCpf());
         if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
             throw new DataIntegrityViolationException("CPF já cadastrado no sistema.");
